@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+</head>
+<body>
+   
+   <div class="container">
+   <br>
+
+   <h1>Products</h1>
+
+   <input type="radio" value="Price filter" name="price" id="price">
+    <div id="customers"></div>
+    
+    </div>
+    
+    <script>
+        
+(function (e) {
+    const xhr = new XMLHttpRequest();
+    
+    xhr.open('GET', 'products.json', true);
+    
+    xhr.onload = function(){
+        if(this.status === 200){
+          // console.log(this.responseText);
+            const customers = JSON.parse(this.responseText);
+            
+            let output = "";
+            
+            customers.forEach((customer)=>{
+             output += `
+           <ul>
+            <li>ID: ${customer.prodCate_model}</li>
+            <li>Series: ${customer.seriesUrl}</li>
+            <li>Category: ${customer.categoryUrl}</li>
+            <li>MRP: ${customer.prodSeries_price}</li>
+            <li>ID: <img src="https://www.bluestarindia.com/roomacs/code/${customer.prodSeries_imgPath}" /></li>
+            </ul>`;
+            });
+
+            document.getElementById('customers').innerHTML = output;
+
+//filter price
+    const price = document.getElementById('price');
+    price.addEventListener('click', (e) => {
+        pricefilter();
+    });
+
+pricefilter = (e) => {
+    const filteredCharacters = customers.filter((price) => {
+        return (
+            price.prodSeries_price >= '64,000' && 
+            price.prodSeries_price <= '80,000' 
+        );
+    });
+    
+    let output2 = "";
+    filteredCharacters.forEach((customer)=>{
+             output2 += `
+           <ul>
+            <li>ID: ${customer.prodCate_model}</li>
+            <li>Series: ${customer.seriesUrl}</li>
+            <li>Category: ${customer.categoryUrl}</li>
+            <li>MRP: ${customer.prodSeries_price}</li>
+            <li>ID: <img src="https://www.bluestarindia.com/roomacs/code/${customer.prodSeries_imgPath}" /></li>
+            </ul>`;
+    });  
+ document.getElementById('customers').innerHTML = output2;
+
+}
+           }
+    }
+    
+    xhr.send();
+}) ();
+
+
+    </script>
+</body>
+</html>
